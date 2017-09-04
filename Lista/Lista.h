@@ -83,7 +83,21 @@ Lista<T>::Lista() {
  * @param li
  */
 template<class T>
-Lista<T>::Lista(const Lista<T> &li) {}
+Lista<T>::Lista(const Lista<T> &li) {
+    inicio = new nodo<T>;
+
+    nodo<T> *tmp = li.inicio;
+    nodo<T> *aux = inicio;
+    nodo<T> *aux2;
+
+    while (tmp != NULL) {
+        aux->dato = tmp->dato;
+        aux2 = new nodo<T>;
+        aux->siguiente = &aux2;
+        tmp = tmp->siguiente;
+        aux = aux->siguiente;
+    }
+}
 
 
 /**
@@ -93,7 +107,7 @@ Lista<T>::Lista(const Lista<T> &li) {}
  */
 template<class T>
 Lista<T>::~Lista() {
-
+    this->vaciar();
 }
 
 
@@ -137,7 +151,7 @@ void Lista<T>::insertar(int pos, T dato) {
     int cont = 0;
     nodo<T> *aux = inicio;
     if (pos == 0) {
-        nodo<T> nodoAux = new nodo<T>(dato,inicio);
+        nodo<T> *nodoAux = new nodo<T>(dato,inicio);
         inicio = nodoAux;
         return;
     }
@@ -145,8 +159,8 @@ void Lista<T>::insertar(int pos, T dato) {
         aux = aux->getSiguiente();
         cont++;
     }
-    if (cont==pos) {
-        nodo<T> nodoAux = new nodo<T>(dato,aux->getSiguiente());
+    if (cont==pos-1) {
+        nodo<T> *nodoAux = new nodo<T>(dato,aux->getSiguiente());
         aux->setSiguiente(nodoAux);
     }
     else {
@@ -165,7 +179,7 @@ void Lista<T>::insertar(int pos, T dato) {
 template<class T>
 void Lista<T>::insertarPrimero(T dato) {
     nodo<T> *aux = inicio;
-    nodo<T> nodoAux = new nodo<T>(dato,inicio);
+    nodo<T> *nodoAux = new nodo<T>(dato,inicio);
     inicio = nodoAux;
 }
 
@@ -182,7 +196,7 @@ void Lista<T>::insertarUltimo(T dato) {
     while (aux->getSiguiente() !=NULL) {
         aux = aux->getSiguiente();
     }
-    nodo<T> nodoAux = new nodo<T>(dato,NULL);
+    nodo<T> *nodoAux = new nodo<T>(dato,NULL);
     aux->setSiguiente(nodoAux);
 }
 
@@ -199,17 +213,17 @@ void Lista<T>::remover(int pos) {
     nodo<T> *tmp;
     if (pos == 0) {
         inicio = inicio->getSiguiente();
-        delete [] aux;
+        delete aux;
         return;
     }
     while (aux!=NULL && cont < pos-1) {
         aux = aux->getSiguiente();
         cont++;
     }
-    if (cont==pos) {
-        tmp = aux.getSiguiente();
-        aux.setSiguiente(tmp.getSiguiente());
-        delete [] tmp;
+    if (cont==pos-1) {
+        tmp = aux->getSiguiente();
+        aux->setSiguiente(tmp->getSiguiente());
+        delete tmp;
     }
     else {
         if(aux==NULL) {
@@ -230,15 +244,12 @@ T Lista<T>::getDato(int pos) {
     int cont = 0;
     nodo<T> *aux = inicio;
 
-    if (pos==0) {
-        return inicio;
-    }
-    while (aux!=NULL && cont < pos-1) {
+    while (aux!=NULL && cont < pos) {
         aux = aux->getSiguiente();
         cont++;
     }
     if (cont == pos) {
-        return aux;
+        return aux->getDato();
     }
     else{
         if (aux==NULL) {
@@ -258,17 +269,22 @@ template<class T>
 void Lista<T>::reemplazar(int pos, T dato) {
     int cont = 0;
     nodo<T> *aux = inicio;
-
-    if (pos==0) {
-        inicio->setDato(dato);
+    if (pos == 0) {
+        nodo<T> *nodoAux = new nodo<T>(dato,aux->getSiguiente());
+        inicio = nodoAux;
+        delete aux;
+        return;
     }
     while (aux!=NULL && cont < pos-1) {
         aux = aux->getSiguiente();
         cont++;
     }
-    if (cont == pos) {
-        aux = aux->getSiguiente();
-        aux->setDato(dato);
+    if (cont==pos-1) {
+        nodo<T> *nodoAux = new nodo<T>(dato,aux->getSiguiente());
+        nodo<T> *tmp = aux->getSiguiente();
+        aux->setSiguiente(nodoAux);
+        nodoAux->setSiguiente(tmp->getSiguiente());
+        delete tmp;
     }
     else{
         if (aux==NULL) {
@@ -283,7 +299,17 @@ void Lista<T>::reemplazar(int pos, T dato) {
  * @tparam T
  */
 template<class T>
-void Lista<T>::vaciar() {}
+void Lista<T>::vaciar() {
+    nodo<T> *aux = inicio;
+    nodo<T> *tmp = inicio;
+
+    while (aux != NULL) {
+        tmp = aux;
+        aux = aux->getSiguiente();
+        delete tmp;
+    }
+    inicio = NULL;
+}
 
 
 #endif //LISTA_H
