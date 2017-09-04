@@ -178,7 +178,6 @@ void Lista<T>::insertar(int pos, T dato) {
  */
 template<class T>
 void Lista<T>::insertarPrimero(T dato) {
-    nodo<T> *aux = inicio;
     nodo<T> *nodoAux = new nodo<T>(dato,inicio);
     inicio = nodoAux;
 }
@@ -192,12 +191,17 @@ void Lista<T>::insertarPrimero(T dato) {
 template<class T>
 void Lista<T>::insertarUltimo(T dato) {
     nodo<T> *aux = inicio;
-
-    while (aux->getSiguiente() !=NULL) {
-        aux = aux->getSiguiente();
+    if (inicio == NULL) {
+        nodo<T> *nodoAux = new nodo<T>(dato,NULL);
+        inicio = nodoAux;
     }
-    nodo<T> *nodoAux = new nodo<T>(dato,NULL);
-    aux->setSiguiente(nodoAux);
+    else {
+        while (aux->getSiguiente() != NULL) {
+            aux = aux->getSiguiente();
+        }
+        nodo<T> *nodoAux = new nodo<T>(dato,NULL);
+        aux->setSiguiente(nodoAux);
+    }
 }
 
 
