@@ -64,6 +64,8 @@ public:
     void reemplazar(int pos, T dato);
 
     void vaciar();
+
+    bool insertAfter2(T oldValue, int n, T newValue);
 };
 
 
@@ -314,6 +316,34 @@ void Lista<T>::vaciar() {
     }
     inicio = NULL;
 }
+
+template<class T>
+bool Lista<T>::insertAfter2(T oldValue, int n, T newValue) {
+    nodo<T> *aux = inicio;
+    int cont = 0;
+    int pos = 0;
+    if (n == 0) {
+        this->insertarPrimero(newValue);
+        return 1;
+    }
+    while (aux != NULL && cont != n) {
+        if (aux->getDato() == oldValue) {
+            cont++;
+        }
+        aux = aux->getSiguiente();
+        pos++;
+    }
+    if (cont == n) {
+        this->insertar(pos,newValue);
+    }
+    else {
+        if (aux == NULL) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 
 
 #endif //LISTA_H
