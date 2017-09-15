@@ -317,6 +317,14 @@ void Lista<T>::vaciar() {
     inicio = NULL;
 }
 
+/**
+ * Tras la n-esima ocurrencia de oldValue, inserta newValue
+ * Devuelve 1 si sale bien y 0 si no se pudo agregar
+ * @tparam T
+ * @param oldValue valor de que se busca
+ * @param n cantidad de veces que se repite
+ * @param newValue valor que se inserta cuando se encuentran n oldvelues
+ */
 template<class T>
 bool Lista<T>::insertAfter2(T oldValue, int n, T newValue) {
     nodo<T> *aux = inicio;
@@ -343,7 +351,5 @@ bool Lista<T>::insertAfter2(T oldValue, int n, T newValue) {
     }
     return 1;
 }
-
-
 
 #endif //LISTA_H
